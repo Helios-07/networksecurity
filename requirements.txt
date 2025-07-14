@@ -4,6 +4,7 @@ numpy
 matplotlib
 scikit-learn
 seaborn
+pymongo[srv]
 pymongo
 certifi
 
