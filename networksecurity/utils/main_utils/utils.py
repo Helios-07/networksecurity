@@ -1,18 +1,14 @@
-from idlelib.outwin import file_line_pats
-
-import dill
-import yaml
 import os,sys
+import yaml
 import numpy as np
 import pickle
-
-from numpy.random import random_sample
 
 from networksecurity.exception.exception import NetworkSecurityException
 from networksecurity.logging.logger import logging
 
 from sklearn.model_selection import GridSearchCV
-from sklearn.metrics import r2_score
+# FIX: Import a proper classification metric utility
+from networksecurity.utils.ml_utils.metric.classification_metric import get_classification_score
 
 
 def read_yaml_file(file_path: str)-> dict:
@@ -63,7 +59,6 @@ def load_object(file_path:str)->object:
         if not os.path.exists(file_path):
             raise Exception(f"The file: {file_path} is not present")
         with open(file_path, 'rb') as file_obj:
-            print(file_obj)
             return pickle.load(file_obj)
     except Exception as e:
         raise NetworkSecurityException(e,sys)
@@ -77,32 +72,32 @@ def load_numpy_array(file_path:str)->np.array:
 
 
 def evaluate_models(X_train, y_train,X_test,y_test,models,param):
+    """
+    This function evaluates multiple models using GridSearchCV and returns a report
+    of their performance along with the dictionary of best-fitted models.
+    """
     try:
         report = {}
 
         for i in range(len(list(models))):
+            model_name = list(models.keys())[i]
             model = list(models.values())[i]
-            para=param[list(models.keys())[i]]
+            para = param[model_name]
 
+            # Use GridSearchCV for hyperparameter tuning
             gs = GridSearchCV(model,para,cv=3)
             gs.fit(X_train,y_train)
 
-            model.set_params(**gs.best_params_)
-            model.fit(X_train,y_train)
+            # Update the model in the dictionary with the best fitted estimator
+            models[model_name] = gs.best_estimator_
 
-            #model.fit(X_train, y_train)  # Train model
+            # Predict on the test set
+            y_test_pred = models[model_name].predict(X_test)
 
-            y_train_pred = model.predict(X_train)
+            test_metric = get_classification_score(y_true=y_test, y_pred=y_test_pred)
+            report[model_name] = test_metric.f1_score
 
-            y_test_pred = model.predict(X_test)
-
-            train_model_score = r2_score(y_train, y_train_pred)
-
-            test_model_score = r2_score(y_test, y_test_pred)
-
-            report[list(models.keys())[i]] = test_model_score
-
-        return report
+        return report, models
 
     except Exception as e:
         raise NetworkSecurityException(e, sys)
