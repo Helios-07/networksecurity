@@ -19,3 +19,11 @@ Here is a view of a single experiment's details and metrics tracked in MLflow.
 ## Comparing Experiments
 DagsHub provides a powerful interface to compare different experiment runs side-by-side, helping us select the best-performing model.
 ![Dagshub_Experiment_Comparison](screenshots/dagshub_experiment_comparison.png)
+
+
+---
+
+
+### 🚀 API Endpoints
+The trained model is served via a FastAPI application. The following endpoints are available for training and prediction, as shown in the interactive API documentation.
+![Fastapi_Api_Docs](screenshots/fastapi_api_docs.png)
