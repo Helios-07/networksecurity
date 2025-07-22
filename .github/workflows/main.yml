@@ -73,7 +73,8 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          # --- FIX: Corrected typo from 'aws-secret-key' to 'aws-secret-access-key' ---
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Login to Amazon ECR
@@ -88,7 +89,6 @@ jobs:
         run: |
           docker stop networksecurity && docker rm networksecurity || true
 
-      # --- FINAL FIX: Correct port mapping from 8080 to 8000 ---
       - name: Run Docker Image to serve users
         run: |
           docker run -d -p 8080:8000 \
