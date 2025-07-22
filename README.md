@@ -23,7 +23,26 @@ DagsHub provides a powerful interface to compare different experiment runs side-
 
 ---
 
+### 🚀 Deployment & CI/CD
+The project is deployed on AWS with a full CI/CD pipeline managed by GitHub Actions.
 
-### 🚀 API Endpoints
-The trained model is served via a FastAPI application. The following endpoints are available for training and prediction, as shown in the interactive API documentation.
-![Fastapi_Api_Docs](screenshots/fastapi_api_docs.png)
+## Model Storage on S3
+The trained model artifacts are stored in an AWS S3 bucket for persistence and versioning.
+![s3-bucket-artifacts & final-model](screenshots/s3-bucket-artifacts%20&%20final-model.png)
+
+
+## Successful CI/CD Pipeline
+The GitHub Actions workflow automates the entire process from integration and delivery to final deployment.
+![github-actions-successful-ci-cd](screenshots/github-actions-successful-ci-cd.png)
+
+
+## EC2 Deployment Server
+The application is served from an AWS EC2 instance.
+![ec2-instance-details](screenshots/ec2-instance-details.png)
+
+
+## Live API Endpoint
+The final running application provides a FastAPI interface with interactive API documentation.
+![fastapi-application](screenshots/fastapi-application.png)
+![fastapi-application-running](screenshots/fastapi-application-running.png)
+
